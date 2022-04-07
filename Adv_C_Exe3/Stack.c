@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void rotateStack(Stack* s, int n);
+void removeItem(charNode* head);
+charNode* addToHead(charNode* head, charNode* toadd);
+
 /***************** Stack ADT Implementation *****************/
 
 void initStack(Stack* s)
@@ -11,7 +15,25 @@ void initStack(Stack* s)
 
 void destroyStack(Stack* s)
 {
-	free(s); 
+	charNode* ptr = s->head; 
+	if (s->head == NULL)
+		return;
+	if (s->head->next == NULL)
+	{
+		free(s->head);
+		s->head = NULL;
+		return;
+	}
+	while (ptr->next != NULL)
+	{
+		if (ptr->next->next == NULL) {
+			charNode* temp = ptr->next;
+			ptr->next = NULL;
+			free(temp);
+			break;
+			}
+	}
+	destroyStack(s);
 }
 
 void push(Stack* s, char data)
@@ -47,8 +69,22 @@ int isEmptyStack(const Stack* s)
 
 void flipBetweenHashes(const char* sentence)
 {
-	// add your code here
+	int count = 0;
+	for (int i = 0; i < strlen(sentence); i++)
+	{
+		if (sentence[i] == '#')
+			count++;
+	}
+	if (count % 2 == 1)
+		count--;
+	count /= 2;
+	Stack to_REV_sen;
+	initStack(&to_REV_sen);
+	for (int i = 0; i < ; i++){
+		push(&to_REV_sen, sentence[i]);
+	}
 }
+
 
 int isPalindrome(Stack* s)
 {
@@ -67,7 +103,7 @@ charNode* addToHead(charNode* head, charNode* toadd) {
 }
 
 void removeItem(charNode **head) {
-	charNode* tmp = head;
+	charNode* tmp = *head;
 	*head = (*head)->next;
 	free(tmp);
 }

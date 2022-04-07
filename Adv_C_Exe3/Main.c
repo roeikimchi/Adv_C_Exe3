@@ -11,7 +11,8 @@ void main()
 	int num = isEmptyStack(&s1);
 	push(&s1,c1);
 	push(&s1, c2);
-	char c3 = pop(&s1);
+	//char c3 = pop(&s1);
 	num = isEmptyStack(&s1);
 	destroyStack(&s1);
+	flipBetweenHashes("abg#dsa#");
 }
