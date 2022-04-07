@@ -1,16 +1,11 @@
 #include "Stack.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 /***************** Stack ADT Implementation *****************/
 
 void initStack(Stack* s)
 {
-
-	s->head = (Stack*)malloc(sizeof(Stack));// Allocate memory for ADT 
-	if (s == NULL) {
-		printf("initstack: memory allocation faild\n");
-		return;
-	}
 	s->head = NULL;
 }
 
@@ -21,17 +16,17 @@ void destroyStack(Stack* s)
 
 void push(Stack* s, char data)
 {
-	charNode* newnode = (charNode*)malloc(sizeof(charNode));
-	if (newnode == NULL) {
-		printf("push: memory allocation faild\n");
+	charNode* newnode; 
+	newnode = (charNode*)malloc(sizeof(charNode));
+	if (newnode == NULL)
 		return;
-	}
 	newnode->data = data;
 	s->head = addToHead(s->head, newnode);
 }
 
 char pop(Stack* s)
 {
+
 	char tav = s->head->data;
 	removeItem(&(s->head));
 	return tav;
@@ -71,8 +66,8 @@ charNode* addToHead(charNode* head, charNode* toadd) {
 	return head;
 }
 
-void removeItem(charNode** head) {
-	charNode* tmp = *head;
+void removeItem(charNode **head) {
+	charNode* tmp = head;
 	*head = (*head)->next;
 	free(tmp);
 }
