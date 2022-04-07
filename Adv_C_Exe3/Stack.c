@@ -5,7 +5,8 @@
 
 void initStack(Stack* s)
 {
-	s = (Stack*)malloc(sizeof(Stack));// Allocate memory for ADT 
+
+	s->head = (Stack*)malloc(sizeof(Stack));// Allocate memory for ADT 
 	if (s == NULL) {
 		printf("initstack: memory allocation faild\n");
 		return;
