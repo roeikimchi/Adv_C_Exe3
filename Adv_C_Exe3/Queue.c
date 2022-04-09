@@ -1,10 +1,15 @@
 #include "Queue.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 
 /***************** Queue ADT Implementation *****************/
 
 void initQueue(Queue* q)
 {
-	// add your code here
+	q->head = NULL;
+	q->tail = NULL;
 }
 
 void destroyQueue(Queue* q)
@@ -14,17 +19,44 @@ void destroyQueue(Queue* q)
 
 void enqueue(Queue* q, unsigned int data)
 {
-	// add your code here
+	intNode* p = (intNode*)malloc(sizeof(intNode));
+	if (p == NULL) {
+		printf("memory allocation problem\n");
+		return;
+	}
+	p->data= data;
+	p->next = NULL;
+
+	if (isEmptyQueue(q))
+	{
+		q->tail->next = p;
+	}
+	else
+	{
+		q->head = p;
+	}
+	q->tail = p;
+
 }
 
 unsigned int dequeue(Queue* q)
 {
-	// add your code here
+	int temp = q->head->data;
+	intNode* p = q->head;
+	q->head = q->head->next;
+
+	if (q->head == NULL) {
+		q->tail = NULL;
+	}
+	free(p);
+	return temp;
 }
 
 int isEmptyQueue(const Queue* q)
 {
-	// add your code here
+	if (q->head == NULL && q->tail == NULL)
+		return 1;
+	else return 0;
 }
 
 /***************** Functions using Queues - Implementation/definition **************************/
