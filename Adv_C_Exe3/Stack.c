@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "Stack.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,7 +6,7 @@
 
 void rotateStack(Stack* s, int n);
 void removeItem(charNode* head);
-void pushTOrev(Stack* s, char* ptr);
+void PushToRev(Stack* s, char* ptr);
 void popTOrev(Stack* s, char* ptr);
 charNode* addToHead(charNode* head, charNode* toadd);
 
@@ -72,40 +73,23 @@ int isEmptyStack(const Stack* s)
 
 void flipBetweenHashes(const char* sentence)
 {
-	char* ptr = sentence;
-	/*char new_sentence[strlen(sentence)+1];
-	char** ptr = new_sentence;
-	strcpy( new_sentence, sentence);*/
-	Stack to_REV_sen;
-	initStack(&to_REV_sen);
-
-	while (*ptr != '\0')
+	char* ptr_sen = sentence;
+	Stack to_rev, after_rev;
+	initStack(&to_rev);
+	initStack(&after_rev);
+	while (*ptr_sen != '\0')
 	{
-		if (*ptr == '#') {
-
-			++ptr;
-			pushTOrev(&to_REV_sen,ptr);
-			popTOrev(&to_REV_sen, ptr);
+		if (*ptr_sen == '#') 
+		{
+			++ptr_sen;
+			PushToRev(&to_rev, ptr_sen);
 		}
-
-		ptr++;
+		if (*ptr_sen != '#')
+		{
+			push(&after_rev, *ptr_sen);
+			ptr_sen++;
+		}
 	}
-
-
-	/*int count = 0;
-	for (int i = 0; i < strlen(sentence); i++)
-	{
-		if (sentence[i] == '#')
-			count++;
-	}
-	if (count % 2 == 1)
-		count--;
-	count /= 2;
-	Stack to_REV_sen;
-	initStack(&to_REV_sen);
-	for (int i = 0; i < ; i++){
-		push(&to_REV_sen, sentence[i]);
-	}*/
 }
 
 
@@ -139,13 +123,9 @@ void removeItem(charNode **head) {
 	free(tmp);
 }
 
-void pushTOrev(Stack* s, char* ptr) {
+void PushToRev(Stack* s, char* ptr) {
 
-	while (*ptr != '#')
-	{
-		push(s, *ptr);
-		ptr++;
-	}
+	
 }
 
 void popTOrev(Stack* s, char* ptr) {
