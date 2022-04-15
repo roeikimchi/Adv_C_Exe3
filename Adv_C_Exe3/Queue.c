@@ -24,7 +24,7 @@ void enqueue(Queue* q, unsigned int data)
 		printf("memory allocation problem\n");
 		return;
 	}
-	p->data= data;
+	p->data = data;
 	p->next = NULL;
 
 	if (isEmptyQueue(q))

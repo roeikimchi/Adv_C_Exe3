@@ -45,7 +45,10 @@ void push(Stack* s, char data)
 	charNode* newnode; 
 	newnode = (charNode*)malloc(sizeof(charNode));
 	if (newnode == NULL)
+	{
+		printf("memory allocation problem\n");
 		return;
+	}
 	newnode->data = data;
 	s->head = addToHead(s->head, newnode);
 }
@@ -74,21 +77,30 @@ int isEmptyStack(const Stack* s)
 void flipBetweenHashes(const char* sentence)
 {
 	char* ptr_sen = sentence;
-	Stack to_rev, after_rev;
+	Stack to_rev;
 	initStack(&to_rev);
-	initStack(&after_rev);
 	while (*ptr_sen != '\0')
 	{
-		if (*ptr_sen == '#') 
-		{
-			++ptr_sen;
-			PushToRev(&to_rev, ptr_sen);
-		}
 		if (*ptr_sen != '#')
 		{
-			push(&after_rev, *ptr_sen);
-			ptr_sen++;
+			printf("%c", *ptr_sen);
 		}
+		if (*ptr_sen == '#')
+		{
+			if (*(ptr_sen + 1) == '\0')
+				return;
+			++ptr_sen;
+			while (*ptr_sen != '#' && *ptr_sen != '\0')
+			{
+				push(&to_rev, *ptr_sen);
+				++ptr_sen;
+			}
+			while (to_rev.head != NULL && *ptr_sen != '\0')
+			{
+				printf("%c", pop(&to_rev));
+			}
+		}
+		ptr_sen++;
 	}
 }
 

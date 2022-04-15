@@ -14,8 +14,7 @@ void main()
 	//char c3 = pop(&s1);
 	num = isEmptyStack(&s1);
 	destroyStack(&s1);
-	
 	int omri = isPalindrome(&s1);
-	const char arr[8] = "abg#dsa#";
+	const char arr[11] = "abgdsa#\0";
 	flipBetweenHashes(arr);
 }
