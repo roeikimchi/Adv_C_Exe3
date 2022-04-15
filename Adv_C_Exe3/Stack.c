@@ -4,10 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void rotateStack(Stack* s, int n);
 void removeItem(charNode* head);
-void PushToRev(Stack* s, char* ptr);
-void popTOrev(Stack* s, char* ptr);
 charNode* addToHead(charNode* head, charNode* toadd);
 
 /***************** Stack ADT Implementation *****************/
@@ -55,21 +52,19 @@ void push(Stack* s, char data)
 
 char pop(Stack* s)
 {
-
 	char tav = s->head->data;
 	removeItem(&(s->head));
 	return tav;
-	
 }
 
 
 int isEmptyStack(const Stack* s)
 {
-	if (s->head == NULL) {
+	if (s->head == NULL) 
+	{
 		return 1;
 	}
 	return 0; 
-
 }
 
 /*************** Functions using stacks - Implementation/definition **************************/
@@ -115,7 +110,6 @@ int isPalindrome(Stack* s)
 		push(&compareStack, ptr->data);
 		ptr = ptr->next;
 	}
-	
 }
 
 void rotateStack(Stack* s, int n)
@@ -135,25 +129,9 @@ void removeItem(charNode **head) {
 	free(tmp);
 }
 
-void PushToRev(Stack* s, char* ptr) {
-
-	
-}
-
-void popTOrev(Stack* s, char* ptr) {
-	while (*ptr != '#')
-	{
-		*ptr = pop(s);
-		ptr++;
-	}
-}
 
 Stack* copyStack(Stack* s) {
 
 	Stack newstack;
 	initStack(&newstack);
-
-
-
-	
 }
