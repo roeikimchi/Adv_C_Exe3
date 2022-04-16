@@ -40,18 +40,18 @@ void main()
 			case '3':
 				res = isEmptyStack(&s1);
 				if (res == 1)
-					printf("\nThe stack is empty");
+					printf("\nThe stack is empty\n");
 				if (res == 0)
-					printf("\nThe stack isn't empty");
+					printf("\nThe stack isn't empty\n");
 				break;
 			case '4':
 				break;
 			case '5':
 				res = isPalindrome(&s1);
 				if (res == 1)
-					printf("\nThe stack is palindrome");
+					printf("\nThe stack is palindrome\n");
 				if (res == 0)
-					printf("\nThe stack isn't palindrome");
+					printf("\nThe stack isn't palindrome\n");
 				break;
 			case '6':
 				printf("\nenter number of items from buttom of stack to move: ");
@@ -60,14 +60,14 @@ void main()
 				break;
 			case '7':
 				destroyStack(&s1);
-				printf("\nstack is now empty, you can check it with option 3... ");
+				printf("\nstack is now empty, you can check it with option 3... \n");
 				break;
 			case '8':
 				printStack(&s1);
 				break;
 			case '0':
 				return;
-			default: printf("\nYou enterd wrong char, Please try again: ");
+			default: printf("\nYou enterd wrong char, Please try again. \n");
 			}
 		}
 	}

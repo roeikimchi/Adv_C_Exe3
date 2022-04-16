@@ -28,12 +28,14 @@ void destroyStack(Stack* s)
 	}
 	while (ptr->next != NULL)
 	{
-		if (ptr->next->next == NULL) {
+		if (ptr->next->next == NULL) 
+		{
 			charNode* temp = ptr->next;
 			ptr->next = NULL;
 			free(temp);
 			break;
-			}
+		}
+		ptr = ptr->next;
 	}
 	destroyStack(s);
 }
@@ -103,14 +105,33 @@ void flipBetweenHashes(const char* sentence)
 
 int isPalindrome(Stack* s)
 {
-	charNode* ptr = s->head;
+	int res = 0;
+	if (isEmptyStack(s) == 1)
+		return 1;
+
 	Stack compareStack;
 	initStack(&compareStack);
+	Stack* compareStackPtr = &compareStack;
+	charNode* ptr = s->head;
 	while (ptr != NULL)
 	{
-		push(&compareStack, ptr->data);
+		push(compareStackPtr, ptr->data);
 		ptr = ptr->next;
 	}
+
+	charNode* ptrOrig = s->head;
+	charNode* ptrComp = compareStackPtr->head;
+	
+	while (ptrOrig != NULL && ptrComp != NULL)
+	{
+		if (ptrOrig->data != ptrComp->data)
+		{
+			return 0;
+		}
+		ptrOrig = ptrOrig->next;
+		ptrComp = ptrComp->next;
+	}
+	return 1;
 }
 
 void rotateStack(Stack* s, int n)
