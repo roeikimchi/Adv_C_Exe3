@@ -6,6 +6,7 @@
 
 void removeItem(charNode* head);
 charNode* addToHead(charNode* head, charNode* toadd);
+printStack(Stack* s);
 
 /***************** Stack ADT Implementation *****************/
 
@@ -114,24 +115,72 @@ int isPalindrome(Stack* s)
 
 void rotateStack(Stack* s, int n)
 {
-	// add your code here
+	charNode* ptr = s->head;
+	int counter = 0;
+	if (n < 0)
+		return;
+	
+	while (ptr != NULL)
+	{
+		counter++;
+		ptr = ptr->next;
+	}
+
+	if (n > counter)
+		return;
+
+	Stack temp_s1;
+	initStack(&temp_s1);
+	Stack temp_s2;
+	initStack(&temp_s2);
+	Stack* temp1s = &temp_s1;
+	Stack* temp2s = &temp_s2;
+	for (int i = 0; i < (counter - n) ; i++)
+	{
+		push(temp1s, pop(s));
+	}
+	while (s->head != NULL)
+	{
+		push(temp2s, pop(s));
+	}
+	destroyStack(s);
+	while (temp1s->head != NULL)
+	{
+		push(s, pop(temp1s));
+	}
+	while (temp2s->head != NULL)
+	{
+		push(s, pop(temp2s));
+	}
 }
 
-charNode* addToHead(charNode* head, charNode* toadd) {
+charNode* addToHead(charNode* head, charNode* toadd) 
+{
 	toadd->next = head;
 	head = toadd;
 	return head;
 }
 
-void removeItem(charNode **head) {
+void removeItem(charNode **head) 
+{
 	charNode* tmp = *head;
 	*head = (*head)->next;
 	free(tmp);
 }
 
-
-Stack* copyStack(Stack* s) {
-
-	Stack newstack;
-	initStack(&newstack);
+printStack(Stack* s)
+{
+	if (isEmptyStack(s) == 1)
+	{
+		printf("\nStack is empty!\n");
+		return;
+	}
+	charNode* ptr = s->head;
+	printf("\n");
+	while (ptr->next != NULL)
+	{
+		printf("%c -> ", ptr->data);
+		ptr = ptr->next;
+	}
+	printf("%c\n", ptr->data);
 }

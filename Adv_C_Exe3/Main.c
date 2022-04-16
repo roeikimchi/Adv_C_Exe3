@@ -54,11 +54,16 @@ void main()
 					printf("\nThe stack isn't palindrome");
 				break;
 			case '6':
+				printf("\nenter number of items from buttom of stack to move: ");
+				scanf("%d", &num_to_rot);
 				rotateStack(&s1, num_to_rot);
 				break;
 			case '7':
 				destroyStack(&s1);
 				printf("\nstack is now empty, you can check it with option 3... ");
+				break;
+			case '8':
+				printStack(&s1);
 				break;
 			case '0':
 				return;
@@ -121,6 +126,7 @@ char StackMenu() {
 			\n 5. Check if stack is palindrome\
 			\n 6. Rotate the stack\
 			\n 7. Free the stack \
+			\n 8. Print all stack items\
 			\n 0. Exit \n\
 			\n Your choice: ");
 	fseek(stdin, SEEK_END, 0);
