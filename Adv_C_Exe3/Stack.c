@@ -136,6 +136,8 @@ int isPalindrome(Stack* s)
 
 void rotateStack(Stack* s, int n)
 {
+	if (isEmptyStack(s) == 1)
+		return;
 	charNode* ptr = s->head;
 	int counter = 0;
 	if (n < 0)

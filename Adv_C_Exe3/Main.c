@@ -92,9 +92,9 @@ void main()
 			case '3':
 				res = isEmptyQueue(&q1);
 				if (res == 1)
-					printf("\nThe queue is empty");
+					printf("\nThe queue is empty\n");
 				if (res == 0)
-					printf("\nThe queue isn't empty");
+					printf("\nThe queue isn't empty\n");
 				break;
 			case '4':
 				cutAndReplace(&q1);
@@ -107,11 +107,14 @@ void main()
 				break;
 			case '7':
 				destroyQueue(&q1);
-				printf("\queue is now empty, you can check it with option 3... ");
+				printf("\nqueue is now empty, you can check it with option 3... \n");
+				break;
+			case '8':
+				printQueue(&q1);
 				break;
 			case '0':
 				return;
-			default: printf("\nYou enterd wrong char, Please try again: ");
+			default: printf("\nYou enterd wrong char, Please try again: \n");
 			}
 		}
 	}
@@ -142,6 +145,7 @@ char QueueMenu() {
 			\n 5. Sort queue to kids first\
 			\n 6. Rotate the queue\
 			\n 7. Free the queue \
+			\n 8. Print all queue items\
 			\n 0. Exit \n\
 			\n Your choice: ");
 	fseek(stdin, SEEK_END, 0);

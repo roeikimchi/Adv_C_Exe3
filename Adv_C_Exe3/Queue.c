@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+printQueue(Queue* q);
 
 /***************** Queue ADT Implementation *****************/
 
@@ -14,29 +15,49 @@ void initQueue(Queue* q)
 
 void destroyQueue(Queue* q)
 {
-	// add your code here
+	intNode* ptr = q->head;
+	if (q->head == NULL && q->tail == NULL)
+		return;
+	if (q->head->next == NULL)
+	{
+		free(q->head);
+		q->head = q->tail = NULL;
+		return;
+	}
+	while (ptr->next != NULL)
+	{
+		if (ptr->next->next == NULL)
+		{
+			intNode* temp = ptr->next;
+			ptr->next = NULL;
+			free(temp);
+			break;
+		}
+		ptr = ptr->next;
+	}
+	destroyQueue(q);
 }
 
 void enqueue(Queue* q, unsigned int data)
 {
-	intNode* p = (intNode*)malloc(sizeof(intNode));
-	if (p == NULL) {
+	intNode* newNode = (intNode*)malloc(sizeof(intNode));
+	if (newNode == NULL) {
 		printf("memory allocation problem\n");
 		return;
 	}
-	p->data = data;
-	p->next = NULL;
+	newNode->data = data;
+	newNode->next = NULL;
 
 	if (isEmptyQueue(q))
 	{
-		q->tail->next = p;
+		q->head = newNode;
+		q->tail = newNode;
 	}
 	else
 	{
-		q->head = p;
+		q->tail->next = newNode;
+		q->tail = newNode;
 	}
-	q->tail = p;
-
 }
 
 unsigned int dequeue(Queue* q)
@@ -63,15 +84,99 @@ int isEmptyQueue(const Queue* q)
 
 void rotateQueue(Queue* q)
 {
-	// add your code here
+	if (isEmptyQueue(q) == 1)
+		return;
+	intNode* temp;
+	intNode* ptr = q->head;
+	while (ptr->next->next != NULL)
+	{
+		ptr = ptr->next;
+	}
+	temp = q->tail;
+	ptr->next = NULL;
+	temp->next = q->head;
+	q->head = temp;
 }
 
 void cutAndReplace(Queue* q)
 {
-	// add your code here
+	if (isEmptyQueue(q) == 1)
+		return;
+	unsigned int counter = 0, sum = 0;
+	Queue temp;
+	initQueue(&temp);
+	intNode* ptr = q->head;
+	while (ptr != NULL)
+	{
+		counter++;
+		ptr = ptr->next;
+	}
+	if (counter % 2 != 0)
+	{
+		ptr = q->head;
+		while (ptr != NULL)
+		{
+			sum += ptr->data;
+			ptr = ptr->next;
+		}
+		sum /= counter;
+		enqueue(q, sum);
+		counter--;
+	}
+	ptr = q->head;
+	counter /= 2;
+	for (int i = 0; i < counter; i++)
+	{
+		ptr = ptr->next;
+	}
+	while (ptr != NULL)
+	{
+		enqueue(&temp, dequeue(ptr));
+	}
 }
 
 void sortKidsFirst(Queue* q)
 {
-	// add your code here
+	if (isEmptyQueue(q) == 1)
+		return;
+	unsigned int max = q->head->data;
+	intNode* ptr = q->head;
+	while (ptr != NULL)
+	{
+		if (ptr->data > max)
+			max = ptr->data;
+		ptr = ptr->next;
+	}
+
+}
+
+printQueue(Queue* q)
+{
+	if (isEmptyQueue(q) == 1)
+	{
+		printf("\Queue is empty!\n");
+		return;
+	}
+	intNode* ptr = q->head;
+	printf("\n");
+	while (ptr->next != NULL)
+	{
+		printf("%d <- ", ptr->data);
+		ptr = ptr->next;
+	}
+	printf("%d\n", ptr->data);
+}
+
+void addToHead(Queue* q, intNode* toadd)
+{
+	toadd->next = q->head;
+	q->head = toadd;
+}
+
+void addToTail(Queue* q, intNode* toadd)
+{
+	toadd->next = NULL;
+	intNode* temp = q->tail;
+	temp->next = toadd;
+	q->tail = toadd;
 }
