@@ -108,22 +108,22 @@ void cutAndReplace(Queue* q)
 	Queue temp;
 	initQueue(&temp);
 	intNode* ptr = q->head;
-	while (ptr != NULL)
+	while (ptr != NULL)//count how many items are in list 
 	{
 		counter++;
 		ptr = ptr->next;
 	}
-	if (counter % 2 != 0)
+	if (counter % 2 != 0)//if there is odd num of items
 	{
 		ptr = q->head;
-		while (ptr != NULL)
+		while (ptr != NULL)//sum up all items in list
 		{
 			sum += ptr->data;
 			ptr = ptr->next;
 		}
 		sum /= counter;
-		enqueue(q, sum);
-		counter--;
+		enqueue(q, sum);//add new item - average
+		counter++;
 	}
 	ptr = q->head;
 	counter /= 2;
@@ -133,7 +133,17 @@ void cutAndReplace(Queue* q)
 	}
 	while (ptr != NULL)
 	{
-		enqueue(&temp, dequeue(ptr));
+		enqueue(&temp, ptr->data);
+		ptr = ptr->next;
+	}
+	for (int i = 0; i < counter; i++)
+	{
+		enqueue(&temp, dequeue(q));
+	}
+	destroyQueue(q);
+	while (temp.head != NULL)
+	{
+		enqueue(q, dequeue(&temp));
 	}
 }
 
