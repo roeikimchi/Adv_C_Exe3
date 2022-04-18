@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-printQueue(Queue* q);
+void printQueue(Queue* q);
+void addToHeadQ(Queue* q, unsigned int data);
+void addToMiddleQ(intNode* ptr, unsigned int data);
 
 /***************** Queue ADT Implementation *****************/
 
@@ -137,20 +139,48 @@ void cutAndReplace(Queue* q)
 
 void sortKidsFirst(Queue* q)
 {
-	if (isEmptyQueue(q) == 1)
+	if (isEmptyQueue(q) == 1) //do nothing when the queue is empty
 		return;
-	unsigned int max = q->head->data;
-	intNode* ptr = q->head;
-	while (ptr != NULL)
+	Queue temp_q;
+	initQueue(&temp_q);
+	enqueue(&temp_q, dequeue(q));
+	unsigned int num;
+	intNode* ptr = &temp_q.head;
+	ptr = ptr->next;
+	while (q->head != NULL)
 	{
-		if (ptr->data > max)
-			max = ptr->data;
-		ptr = ptr->next;
+		num = dequeue(q);
+		if (num > temp_q.tail->data)
+		{
+			enqueue(&temp_q, num);
+			continue;
+		}
+		if (num < temp_q.head->data)
+		{
+			addToHeadQ(&temp_q, num);
+			continue;
+		}
+		if (num >= temp_q.head->data && num < temp_q.tail->data)
+		{
+			ptr = temp_q.head;
+			while (ptr != NULL)
+			{
+				if (num >= ptr->data && num <= ptr->next->data)
+					break;
+				ptr = ptr->next;
+			}
+			addToMiddleQ(ptr, num);
+		}
 	}
-
+	destroyQueue(q);
+	while (temp_q.head != NULL)
+	{
+		enqueue(q, dequeue(&temp_q));
+	}
+	destroyQueue(&temp_q);
 }
 
-printQueue(Queue* q)
+void printQueue(Queue* q)
 {
 	if (isEmptyQueue(q) == 1)
 	{
@@ -167,16 +197,37 @@ printQueue(Queue* q)
 	printf("%d\n", ptr->data);
 }
 
-void addToHead(Queue* q, intNode* toadd)
+void addToHeadQ(Queue* q, unsigned int data)
 {
-	toadd->next = q->head;
-	q->head = toadd;
+	intNode* newNode = (intNode*)malloc(sizeof(intNode));
+	if (newNode == NULL) {
+		printf("memory allocation problem\n");
+		return;
+	}
+	newNode->data = data;
+	newNode->next = q->head;
+
+	if (isEmptyQueue(q))
+	{
+		q->head = newNode;
+		q->tail = newNode;
+	}
+	else
+	{
+		q->head = newNode;
+	}
 }
 
-void addToTail(Queue* q, intNode* toadd)
+void addToMiddleQ(intNode* ptr, unsigned int data)
 {
-	toadd->next = NULL;
-	intNode* temp = q->tail;
-	temp->next = toadd;
-	q->tail = toadd;
+	intNode* newNode = (intNode*)malloc(sizeof(intNode));
+	if (newNode == NULL) {
+		printf("memory allocation problem\n");
+		return;
+	}
+	newNode->data = data;
+	newNode->next = ptr->next;
+	intNode* temp = ptr->next;
+	ptr->next = newNode;
+	
 }
