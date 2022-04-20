@@ -8,6 +8,7 @@ char QueueMenu();
 
 void main()
 {
+	char* sentence;
 	printf("To use stack enter 'S', to use queue enter 'Q': ");
 	fseek(stdin, SEEK_END, 0);
 	char chose = getchar();
@@ -45,6 +46,10 @@ void main()
 					printf("\nThe stack isn't empty\n");
 				break;
 			case '4':
+				sentence = "Remem#reb# thi#carp s#tice";
+				flipBetweenHashes(sentence);
+				printf("\n");
+
 				break;
 			case '5':
 				res = isPalindrome(&s1);

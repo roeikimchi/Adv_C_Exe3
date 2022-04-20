@@ -74,6 +74,7 @@ int isEmptyStack(const Stack* s)
 
 void flipBetweenHashes(const char* sentence)
 {
+	printf("\n");
 	char* ptr_sen = sentence;
 	Stack to_rev;
 	initStack(&to_rev);
