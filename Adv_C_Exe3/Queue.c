@@ -4,8 +4,9 @@
 #include <string.h>
 
 void printQueue(Queue* q);
-void addToHeadQ(Queue* q, unsigned int data);
-void addToMiddleQ(intNode* ptr, unsigned int data);
+int QueueSize(Queue* q);
+Queue CopyQueue(Queue* q);
+void ReverseQueue(Queue* q);
 
 /***************** Queue ADT Implementation *****************/
 
@@ -67,7 +68,6 @@ unsigned int dequeue(Queue* q)
 	int temp = q->head->data;
 	intNode* p = q->head;
 	q->head = q->head->next;
-
 	if (q->head == NULL)//case there is only 1 item in queue
 		q->tail = NULL;
 	free(p);
@@ -87,158 +87,124 @@ void rotateQueue(Queue* q)
 {
 	if (isEmptyQueue(q) == 1)//case queue is empty
 		return;
-	intNode* temp;
-	intNode* ptr = q->head;
-	while (ptr->next->next != NULL)//puts the ptr on last item
+	int size = QueueSize(q);
+	for (int i = 0; i < size - 1; i++)
 	{
-		ptr = ptr->next;
+		enqueue(q, dequeue(q));
 	}
-	temp = q->tail;
-	ptr->next = NULL;
-	temp->next = q->head;
-	q->head = temp;
 }
 
 void cutAndReplace(Queue* q)
 {
 	if (isEmptyQueue(q) == 1)//case queue is empty
 		return;
-	unsigned int counter = 0, sum = 0;
-	Queue temp_q;
-	initQueue(&temp_q);
-	intNode* ptr = q->head;
-	while (ptr != NULL)//count how many items are in list 
+	int size = QueueSize(q);//get the size of the queue
+	Queue tmp_q;
+	initQueue(&tmp_q);
+	tmp_q = CopyQueue(q);
+	unsigned int sum = 0;
+	if (size % 2 != 0)
 	{
-		counter++;
-		ptr = ptr->next;
-	}
-	if (counter % 2 != 0)//if there is odd num of items
-	{
-		ptr = q->head;
-		while (ptr != NULL)//sum up all items in list
+		while (isEmptyQueue(&tmp_q) == 0)
 		{
-			sum += ptr->data;
-			ptr = ptr->next;
+			sum += dequeue(&tmp_q);
 		}
-		sum /= counter;
-		enqueue(q, sum);//add new item - average
-		counter++;
+		sum /= size;
+		enqueue(q, sum);
+		size++;
 	}
-	ptr = q->head;
-	counter /= 2;
-	for (int i = 0; i < counter; i++)//puts the ptr on the middle 
+	Queue q1, q2;
+	initQueue(&q1);
+	initQueue(&q2);
+	for (int i = 0; i < size / 2; i++)
 	{
-		ptr = ptr->next;
+		enqueue(&q1, dequeue(q));
 	}
-	while (ptr != NULL)//puts the items from middle to end in temp queue
+	for (int i = 0; i < size / 2; i++)
 	{
-		enqueue(&temp_q, ptr->data);
-		ptr = ptr->next;
+		enqueue(&q2, dequeue(q));
 	}
-	for (int i = 0; i < counter; i++)//puts the rest of the items in temp queue
+	ReverseQueue(&q2);
+	while (isEmptyQueue(&q2) == 0)
 	{
-		enqueue(&temp_q, dequeue(q));
+		enqueue(q, dequeue(&q2));
 	}
-	destroyQueue(q);//empty the original queue
-	while (temp_q.head != NULL)//copy the temp queue to the original queue
+	while (isEmptyQueue(&q1) == 0)
 	{
-		enqueue(q, dequeue(&temp_q));
+		enqueue(q, dequeue(&q1));
 	}
-	destroyQueue(&temp_q);//free the temp queue
 }
 
 void sortKidsFirst(Queue* q)
 {
 	if (isEmptyQueue(q) == 1)//case queue is empty
 		return;
-	Queue temp_q;
-	initQueue(&temp_q);
-	enqueue(&temp_q, dequeue(q));
-	unsigned int num;
-	intNode* ptr = &temp_q.head;
-	ptr = ptr->next;
-	while (q->head != NULL)
-	{
-		num = dequeue(q);
-		if (num > temp_q.tail->data)//case node needs to be the last at queue
-		{
-			enqueue(&temp_q, num);
-			continue;
-		}
-		if (num < temp_q.head->data)//case node needs to be the first at queue
-		{
-			addToHeadQ(&temp_q, num);
-			continue;
-		}
-		if (num >= temp_q.head->data && num < temp_q.tail->data)//case node needs to be at middle
-		{
-			ptr = temp_q.head;
-			while (ptr != NULL)
-			{
-				if (num >= ptr->data && num <= ptr->next->data)
-					break;
-				ptr = ptr->next;
-			}
-			addToMiddleQ(ptr, num);
-		}
-	}
-	destroyQueue(q);//empty the original queue
-	while (temp_q.head != NULL)//copy the temp queue to the original queue
-	{
-		enqueue(q, dequeue(&temp_q));
-	}
-	destroyQueue(&temp_q);//free the temp queue
+	Queue tmp_q;
+	initQueue(&tmp_q);
+	tmp_q = CopyQueue(q);
+	int size = QueueSize(q);
+	unsigned int min = 0;
 }
 
 void printQueue(Queue* q)
 {
 	if (isEmptyQueue(q) == 1)//case queue is empty 
 	{
-		printf("\Queue is empty!\n");
+		printf("\nQueue is empty!\n");
 		return;
 	}
-	intNode* ptr = q->head;
+	Queue NewQ;
+	initQueue(&NewQ);
+	NewQ = CopyQueue(q);
 	printf("\n");
-	while (ptr->next != NULL)
+	while (isEmptyQueue(&NewQ) == 0)
 	{
-		printf("%d <- ", ptr->data);
-		ptr = ptr->next;
+		printf("%u <- ", dequeue(&NewQ));
 	}
-	printf("%d\n", ptr->data);
+	printf("\n");
 }
 
-void addToHeadQ(Queue* q, unsigned int data)//puts new node at head of queue
+int QueueSize(Queue* q)
 {
-	intNode* newNode = (intNode*)malloc(sizeof(intNode));
-	if (newNode == NULL) 
+	int counter = 0;
+	Queue tmp;
+	initQueue(&tmp);
+	while (isEmptyQueue(q) == 0)
 	{
-		printf("memory allocation problem\n");
-		return;
+		counter++;
+		enqueue(&tmp, dequeue(q));
 	}
-	newNode->data = data;
-	newNode->next = q->head;
-
-	if (isEmptyQueue(q))//case queue is empty
+	destroyQueue(q);
+	while (isEmptyQueue(&tmp) == 0)
 	{
-		q->head = newNode;
-		q->tail = newNode;
+		enqueue(q, dequeue(&tmp));
 	}
-	else//case queue isn't empty
-	{
-		q->head = newNode;
-	}
+	destroyQueue(&tmp);
+	return counter;
 }
 
-void addToMiddleQ(intNode* ptr, unsigned int data)//puts new node at list between two other nodes
+Queue CopyQueue(Queue* q)
 {
-	intNode* newNode = (intNode*)malloc(sizeof(intNode));
-	if (newNode == NULL) {
-		printf("memory allocation problem\n");
-		return;
+	Queue NewQ;
+	initQueue(&NewQ);
+	int size = QueueSize(q);
+	unsigned int val = 0;
+	for (int i = 0; i < size; i++)
+	{
+		val = dequeue(q);
+		enqueue(&NewQ, val);
+		enqueue(q, val);
 	}
-	newNode->data = data;
-	newNode->next = ptr->next;
-	intNode* temp = ptr->next;
-	ptr->next = newNode;
-	
+	return NewQ;
+}
+
+void ReverseQueue(Queue* q)
+{
+	if (isEmptyQueue(q) == 1)
+		return;
+	unsigned int data = dequeue(q);
+
+	ReverseQueue(q);
+
+	enqueue(q, data);
 }
