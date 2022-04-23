@@ -73,6 +73,36 @@ int isEmptyStack(const Stack* s)
 	return 0; 
 }
 
+printStack(Stack* s)
+{
+	if (isEmptyStack(s) == 1)//case stack is empty
+	{
+		printf("\nStack is empty!\n");
+		return;
+	}
+	charNode* ptr = s->head;
+	printf("\n");
+	while (ptr->next != NULL)//print all items in stack except the last one
+	{
+		printf("%c -> ", ptr->data);
+		ptr = ptr->next;
+	}
+	printf("%c\n", ptr->data);//print the last item in stack
+}
+
+charNode* addToHead(charNode* head, charNode* toadd)//add node to the top of stack (by node)
+{
+	toadd->next = head;
+	head = toadd;
+	return head;
+}
+
+void removeItem(charNode** head)//remove the node that the function gets
+{
+	charNode* tmp = *head;
+	*head = (*head)->next;
+	free(tmp);
+}
 /*************** Functions using stacks - Implementation/definition **************************/
 
 void flipBetweenHashes(const char* sentence)
@@ -106,7 +136,6 @@ void flipBetweenHashes(const char* sentence)
 	}
 }
 
-
 int isPalindrome(Stack* s)
 {
 	if (isEmptyStack(s) == 1)//case stack is empty
@@ -115,129 +144,78 @@ int isPalindrome(Stack* s)
 	initStack(&s1);
 	initStack(&s2);
 	initStack(&original);
+	original = copyStack(s);
 	s1 = copyStack(s);
-	return 0;
-	/*original = *s;
-	s1 = original;
-	while (isEmptyStack(&s1) == 0)
+	reverseStack(&s1);
+	while (isEmptyStack(&s1) == 0 && isEmptyStack(&original) == 0)//compare between the poped data of the original stack and the reverse one
 	{
-		push(&s2, pop(&s1));
-	}
-	while (isEmptyStack(&s2) == 0 && isEmptyStack(&original) == 0)
-	{
-		if (pop(&s2) != pop(&original))
+		if (pop(&s1) != pop(&original))
 			return 0;
 	}
-	return 1;*/
-
-	//Stack* compareStackPtr = &compareStack;
-	//charNode* ptr = s->head;
-	//while (ptr != NULL)//copy and flip the stack to a temp stack 
-	//{
-	//	push(compareStackPtr, ptr->data);
-	//	ptr = ptr->next;
-	//}
-
-	//charNode* ptrOrig = s->head;
-	//charNode* ptrComp = compareStackPtr->head;
-	//
-	//while (ptrOrig != NULL && ptrComp != NULL)//check if stacks are equal
-	//{
-	//	if (ptrOrig->data != ptrComp->data)
-	//	{
-	//		return 0;
-	//	}
-	//	ptrOrig = ptrOrig->next;
-	//	ptrComp = ptrComp->next;
-	//}
-	//return 1;
+	return 1;
 }
 
 void rotateStack(Stack* s, int n)
 {
 	if (isEmptyStack(s) == 1)//case stack is empty
-		return;
-	charNode* ptr = s->head;
-	int counter = 0;
-	if (n < 0)//case n is negative
-		return;
-
-	while (ptr != NULL)//count how many items in stack
 	{
-		counter++;
-		ptr = ptr->next;
-	}
-
-	if (n > counter)//case n is bigger than number of items in stack
-		return;
-
-	Stack temp_s1;
-	initStack(&temp_s1);
-	Stack temp_s2;
-	initStack(&temp_s2);
-	Stack* temp1s = &temp_s1;
-	Stack* temp2s = &temp_s2;
-	for (int i = 0; i < (counter - n) ; i++)//push the items that needs to be at buttom to a new stack
-	{
-		push(temp1s, pop(s));
-	}
-	while (s->head != NULL)//push the rest of the items to a new stack (the items that needs to be first)
-	{
-		push(temp2s, pop(s));
-	}
-	destroyStack(s);//free the original stack
-	while (temp1s->head != NULL)//push the items that needs to be at buttom to the original stack 
-	{
-		push(s, pop(temp1s));
-	}
-	while (temp2s->head != NULL)//push the rest of the items to the original stack (the items that needs to be first)
-	{
-		push(s, pop(temp2s));
-	}
-}
-
-charNode* addToHead(charNode* head, charNode* toadd)//add node to the top of stack (by node)
-{
-	toadd->next = head;
-	head = toadd;
-	return head;
-}
-
-void removeItem(charNode **head)//remove the node that the function gets
-{
-	charNode* tmp = *head;
-	*head = (*head)->next;
-	free(tmp);
-}
-
-printStack(Stack* s)
-{
-	if (isEmptyStack(s) == 1)//case stack is empty
-	{
-		printf("\nStack is empty!\n");
+		printf("\nstack is empty!\n");
 		return;
 	}
-	charNode* ptr = s->head;
-	printf("\n");
-	while (ptr->next != NULL)//print all items in stack except the last one
+	int size = StackSize(s);
+	if (n < 0 || n > size)
+		return;
+	Stack original, s1, s2;
+	initStack(&s1);
+	initStack(&s2);
+	initStack(&original);
+	for (int i = 0; i < size - n; i++)
 	{
-		printf("%c -> ", ptr->data);
-		ptr = ptr->next;
+		push(&s1, pop(s));
 	}
-	printf("%c\n", ptr->data);//print the last item in stack
+	while (isEmptyStack(s) == 0)
+	{
+		push(&s2, pop(s));
+	}
+	destroyStack(s);
+	while (isEmptyStack(&s1) == 0)
+	{
+		push(s, pop(&s1));
+	}
+	while (isEmptyStack(&s2) == 0)
+	{
+		push(s, pop(&s2));
+	}
 }
 
 void reverseStack(Stack* s)
 {
 	if (isEmptyStack(s) == 1)
 		return;
-	char tav = pop(s);
-	reverseStack(s);
-	push(s, tav);
+	int size = StackSize(s);
+	Stack s1, s2;
+	initStack(&s1);
+	initStack(&s2);
+	while (isEmptyStack(s) == 0)
+	{
+		push(&s1, pop(s));
+	}
+	while (isEmptyStack(&s1) == 0)
+	{
+		push(&s2, pop(&s1));
+	}
+	while (isEmptyStack(&s2) == 0)
+	{
+		push(s, pop(&s2));
+	}
+	destroyStack(&s1);
+	destroyStack(&s2);
 }
 
 int StackSize(Stack* s) 
 {	
+	if (isEmptyStack(s) == 1)
+		return 0;
 	int counter = 0; 
 	Stack newStack;
 	initStack(&newStack);
@@ -246,11 +224,9 @@ int StackSize(Stack* s)
 		counter++;
 		push(&newStack, pop(s));
 	}
-	reverseStack(&newStack);
 	destroyStack(s);
 	while (isEmptyStack(&newStack) == 0)
 	{
-		counter++;
 		push(s, pop(&newStack));
 	}
 	destroyStack(&newStack);
@@ -259,17 +235,22 @@ int StackSize(Stack* s)
 
 Stack copyStack(Stack* s)
 {
-	Stack newStack;
-	initStack(&newStack);
+	if (isEmptyStack(s) == 1)
+		return;
 	int size = StackSize(s);
+	Stack s1, s2;
+	initStack(&s1);
+	initStack(&s2);
+	while (isEmptyStack(s) == 0)
+	{
+		push(&s1, pop(s));
+	}
 	char tav;
 	for (int i = 0; i < size; i++)
 	{
-		tav = pop(s);
-		push(&newStack, tav);
+		tav = pop(&s1);
+		push(&s2, tav);
 		push(s, tav);
 	}
-	reverseStack(&newStack);
-	reverseStack(s);
-	return newStack;
+	return s2;
 }

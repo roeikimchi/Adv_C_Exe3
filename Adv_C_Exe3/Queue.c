@@ -81,6 +81,23 @@ int isEmptyQueue(const Queue* q)
 	else return 0;
 }
 
+void printQueue(Queue* q)
+{
+	if (isEmptyQueue(q) == 1)
+	{
+		printf("\Queue is empty!\n");
+		return;
+	}
+	intNode* ptr = q->head;
+	printf("\n");
+	while (ptr->next != NULL)
+	{
+		printf("%d <- ", ptr->data);
+		ptr = ptr->next;
+	}
+	printf("%d\n", ptr->data);
+}
+
 /***************** Functions using Queues - Implementation/definition **************************/
 
 void rotateQueue(Queue* q)
@@ -144,24 +161,6 @@ void sortKidsFirst(Queue* q)
 	tmp_q = CopyQueue(q);
 	int size = QueueSize(q);
 	unsigned int min = 0;
-}
-
-void printQueue(Queue* q)
-{
-	if (isEmptyQueue(q) == 1)//case queue is empty 
-	{
-		printf("\nQueue is empty!\n");
-		return;
-	}
-	Queue NewQ;
-	initQueue(&NewQ);
-	NewQ = CopyQueue(q);
-	printf("\n");
-	while (isEmptyQueue(&NewQ) == 0)
-	{
-		printf("%u <- ", dequeue(&NewQ));
-	}
-	printf("\n");
 }
 
 int QueueSize(Queue* q)
