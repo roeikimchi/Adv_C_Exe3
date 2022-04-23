@@ -85,7 +85,7 @@ void printQueue(Queue* q)
 {
 	if (isEmptyQueue(q) == 1)
 	{
-		printf("\Queue is empty!\n");
+		printf("\nQueue is empty!\n");
 		return;
 	}
 	intNode* ptr = q->head;
@@ -156,11 +156,45 @@ void sortKidsFirst(Queue* q)
 {
 	if (isEmptyQueue(q) == 1)//case queue is empty
 		return;
-	Queue tmp_q;
-	initQueue(&tmp_q);
-	tmp_q = CopyQueue(q);
 	int size = QueueSize(q);
-	unsigned int min = 0;
+	unsigned int min, temp;
+	Queue q1, q2;
+	initQueue(&q1);
+	initQueue(&q2);
+	while (isEmptyQueue(q) == 0)
+	{
+		enqueue(&q1, dequeue(q));
+	}
+	while (QueueSize(q) != size)
+	{
+		min = dequeue(&q1);
+		int duplicates = 1;
+		while (isEmptyQueue(&q1) == 0) 
+		{
+			temp = dequeue(&q1);
+			if (temp == min)
+			{
+				duplicates++;
+			}
+			if (temp < min)
+			{
+				enqueue(&q2, min);
+				min = temp;
+			}
+			if (temp > min)
+			{
+				enqueue(&q2, temp);
+			}
+		}
+		for (int i = 0; i < duplicates; i++)
+		{
+			enqueue(q, min);
+		}
+		while (isEmptyQueue(&q2) == 0)
+		{
+			enqueue(&q1, dequeue(&q2));
+		}
+	}
 }
 
 int QueueSize(Queue* q)
