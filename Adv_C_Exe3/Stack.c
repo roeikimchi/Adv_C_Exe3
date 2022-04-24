@@ -49,7 +49,7 @@ void push(Stack* s, char data)
 	newnode = (charNode*)malloc(sizeof(charNode));
 	if (newnode == NULL)
 	{
-		printf("memory allocation problem\n");
+		printf("Memory allocation problem\n");
 		return;
 	}
 	newnode->data = data;
@@ -163,26 +163,26 @@ void rotateStack(Stack* s, int n)
 		return;
 	}
 	int size = StackSize(s);
-	if (n < 0 || n > size)
+	if (n < 0 || n > size)//case n is negative or greater than stack
 		return;
 	Stack original, s1, s2;
 	initStack(&s1);
 	initStack(&s2);
 	initStack(&original);
-	for (int i = 0; i < size - n; i++)
+	for (int i = 0; i < size - n; i++)//pop the first size of stack-n items from stack
 	{
 		push(&s1, pop(s));
 	}
-	while (isEmptyStack(s) == 0)
+	while (isEmptyStack(s) == 0)//pop the rest of stack
 	{
 		push(&s2, pop(s));
 	}
 	destroyStack(s);
-	while (isEmptyStack(&s1) == 0)
+	while (isEmptyStack(&s1) == 0)//return the items that needs to be at the buttom 
 	{
 		push(s, pop(&s1));
 	}
-	while (isEmptyStack(&s2) == 0)
+	while (isEmptyStack(&s2) == 0)//return the remain items
 	{
 		push(s, pop(&s2));
 	}
@@ -196,15 +196,15 @@ void reverseStack(Stack* s)
 	Stack s1, s2;
 	initStack(&s1);
 	initStack(&s2);
-	while (isEmptyStack(s) == 0)
+	while (isEmptyStack(s) == 0)//push the original stack to s1
 	{
 		push(&s1, pop(s));
 	}
-	while (isEmptyStack(&s1) == 0)
+	while (isEmptyStack(&s1) == 0)//push the original stack to s2
 	{
 		push(&s2, pop(&s1));
 	}
-	while (isEmptyStack(&s2) == 0)
+	while (isEmptyStack(&s2) == 0)//push the original stack back to his location backwards
 	{
 		push(s, pop(&s2));
 	}
@@ -219,13 +219,13 @@ int StackSize(Stack* s)
 	int counter = 0; 
 	Stack newStack;
 	initStack(&newStack);
-	while (isEmptyStack(s) == 0)
+	while (isEmptyStack(s) == 0)//pop the items from the stack and count how many items in stack
 	{
 		counter++;
 		push(&newStack, pop(s));
 	}
 	destroyStack(s);
-	while (isEmptyStack(&newStack) == 0)
+	while (isEmptyStack(&newStack) == 0)//return items from stack to the original location
 	{
 		push(s, pop(&newStack));
 	}
@@ -241,16 +241,16 @@ Stack copyStack(Stack* s)
 	Stack s1, s2;
 	initStack(&s1);
 	initStack(&s2);
-	while (isEmptyStack(s) == 0)
+	while (isEmptyStack(s) == 0)//push items from stack to temp stack 
 	{
 		push(&s1, pop(s));
 	}
 	char tav;
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)//return the items to the original stack and to the new one 
 	{
 		tav = pop(&s1);
 		push(&s2, tav);
 		push(s, tav);
 	}
-	return s2;
+	return s2;//return the copied stack
 }
