@@ -83,7 +83,7 @@ int isEmptyQueue(const Queue* q)
 
 void printQueue(Queue* q)
 {
-	if (isEmptyQueue(q) == 1)
+	if (isEmptyQueue(q) == 1)//case queue is empty
 	{
 		printf("\nQueue is empty!\n");
 		return;
@@ -120,7 +120,7 @@ void cutAndReplace(Queue* q)
 	initQueue(&tmp_q);
 	tmp_q = CopyQueue(q);
 	unsigned int sum = 0;
-	if (size % 2 != 0)
+	if (size % 2 != 0)//case there is odd num of items in queue
 	{
 		while (isEmptyQueue(&tmp_q) == 0)
 		{
@@ -133,20 +133,20 @@ void cutAndReplace(Queue* q)
 	Queue q1, q2;
 	initQueue(&q1);
 	initQueue(&q2);
-	for (int i = 0; i < size / 2; i++)
+	for (int i = 0; i < size / 2; i++)//dequeue the first half of original queue to q1
 	{
 		enqueue(&q1, dequeue(q));
 	}
-	for (int i = 0; i < size / 2; i++)
+	for (int i = 0; i < size / 2; i++)//dequeue the other half of original queue to q2
 	{
 		enqueue(&q2, dequeue(q));
 	}
 	ReverseQueue(&q2);
-	while (isEmptyQueue(&q2) == 0)
+	while (isEmptyQueue(&q2) == 0)//enqueue the second half reversed to the original queue
 	{
 		enqueue(q, dequeue(&q2));
 	}
-	while (isEmptyQueue(&q1) == 0)
+	while (isEmptyQueue(&q1) == 0)//enqueue the first half to the original queue
 	{
 		enqueue(q, dequeue(&q1));
 	}
@@ -165,11 +165,11 @@ void sortKidsFirst(Queue* q)
 	{
 		enqueue(&q1, dequeue(q));
 	}
-	while (QueueSize(q) != size)
+	while (QueueSize(q) != size)//until the original queue is full again
 	{
 		min = dequeue(&q1);
 		int duplicates = 1;
-		while (isEmptyQueue(&q1) == 0) 
+		while (isEmptyQueue(&q1) == 0)//dequeue item and check who is the min
 		{
 			temp = dequeue(&q1);
 			if (temp == min)
@@ -186,7 +186,7 @@ void sortKidsFirst(Queue* q)
 				enqueue(&q2, temp);
 			}
 		}
-		for (int i = 0; i < duplicates; i++)
+		for (int i = 0; i < duplicates; i++)//case there is duplicates items
 		{
 			enqueue(q, min);
 		}
@@ -202,13 +202,13 @@ int QueueSize(Queue* q)
 	int counter = 0;
 	Queue tmp;
 	initQueue(&tmp);
-	while (isEmptyQueue(q) == 0)
+	while (isEmptyQueue(q) == 0)//dequeue the original queue and count how many items there is in queue
 	{
 		counter++;
 		enqueue(&tmp, dequeue(q));
 	}
 	destroyQueue(q);
-	while (isEmptyQueue(&tmp) == 0)
+	while (isEmptyQueue(&tmp) == 0)//return the items from temp queue to the original one
 	{
 		enqueue(q, dequeue(&tmp));
 	}

@@ -127,7 +127,7 @@ void flipBetweenHashes(const char* sentence)
 				push(&to_rev, *ptr_sen);
 				++ptr_sen;
 			}
-			while (isEmptyStack(&to_rev) != 0 && *ptr_sen != '\0')//pop all items from stack and print them (in different order)
+			while (isEmptyStack(&to_rev) == 0 && *ptr_sen != '\0')//pop all items from stack and print them (in different order)
 			{
 				printf("%c", pop(&to_rev));
 			}
